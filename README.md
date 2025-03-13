@@ -6,5 +6,4 @@
 
 3. Run the workflow to analyze the data in a progressive manner with an increment of 1 year, i.e. the first year (1987), the first 2 years (1987-1988), the first 3 years (1987-1989), ..., and the total 22 years (1987-2008), on the maximum allowed number of VMs, and measure each corresponding workflow execution time.
 
-# Hadoop Distribution System Installation:
-http://www.powerxing.com/install-hadoop-cluster/
+<img width="521" alt="image" src="https://github.com/user-attachments/assets/a583ea56-da6d-4c1b-a979-bcc792b3fe0a" />
