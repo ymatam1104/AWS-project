@@ -1,0 +1,68 @@
+Local: Windows Operation System
+
+Commmands:
+1. Upload the java, workflow.xml and job.properties files to the directory /usr/local/hadoop			
+
+2. Create a folder for input in /usr/local/hadoop:
+$ mkdir input
+
+3. Upload the complete data set to the input directory /usr/local/hadoop/input
+
+4. Initiating the Hadoop Cluster and historyserver:
+$ cd $HADOOP_HOME
+$ hdfs namenode -format
+$ sbin/start-all.sh
+$ sbin/mr-jobhistory-daemon.sh start historyserver
+
+5. Check the hadoop cluster's status by opening a web browser and entering the following address:
+Public DNS of master VM:50070 
+
+6. Uploading the input file to HDFS:
+$ hdfs dfs -mkdir -p input
+$ hdfs dfs -put input/* input
+
+7. Uploading oozie's share file to HDFS:
+$ cd $OOZIE_HOME
+$ sudo tar xvf oozie-sharelib-4.3.0.tar.gz #change the sharelib name to your local sharelib name
+$ cd $HADOOP_HOME
+$ hdfs dfs -put $OOZIE_HOME/share share
+
+8. Uploading workflow.xml to HDFS:
+$ hdfs dfs -mkdir DS644project
+$ hdfs dfs -put workflow.xml DS644project
+
+9.Compile the Java files, create a JAR file, and upload it to HDFS in the directory DS644project/lib:
+$ hadoop com.sun.tools.javac.Main *.java
+$ jar cf DS644project.jar *.class
+$ hdfs dfs -mkdir DS644project/lib
+$ hdfs dfs -put DS644project.jar DS644project/lib
+
+10.Initializing the database of oozie:
+$ $OOZIE_HOME/bin/ooziedb.sh create -sqlfile oozie.sql -run
+
+11.Starting oozie:
+$ $OOZIE_HOME/bin/oozied.sh start
+
+12.Verify the status of Oozie; if it indicates System mode: NORMAL, proceed to the next step.
+$ $OOZIE_HOME/bin/oozie admin -oozie http://localhost:11000/oozie -status
+
+12: Run the program:
+$ oozie job -oozie http://localhost:11000/oozie -config job.properties -run
+
+13.View the job status within the Oozie workflow by entering this address in any web browser:
+Public DNS of master VM:11000
+(On this site, you can also discover the execution time of the Oozie workflow.)
+
+14. Get results:
+$ hdfs dfs -get DS644project/output output
+
+14. See the result:
+$ vim output/OnScheduleAirlines/part-r-00000
+Exit:
+:q!
+$ vim output/AirportsTaxiTime/part-r-00000
+Exit:
+:q!
+$ vim output/Cancellations/part-r-00000
+Exit:
+:q!
